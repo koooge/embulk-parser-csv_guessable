@@ -78,11 +78,11 @@ Gem::Specification.new do |spec|
   spec.name          = "${project.name}"
   spec.version       = "${project.version}"
   spec.authors       = ["koooge"]
-  spec.summary       = %[Csv Gussable parser plugin for Embulk]
-  spec.description   = %[Parses Csv Gussable files read by other file input plugins.]
+  spec.summary       = %[Csv Guessable parser plugin for Embulk]
+  spec.description   = %[Parses Csv Guessable files read by other file input plugins.]
   spec.email         = ["koooooge@gmail.com"]
   spec.licenses      = ["MIT"]
-  # TODO set this: spec.homepage      = "https://github.com/koooooge/embulk-parser-csv_gussable"
+  # TODO set this: spec.homepage      = "https://github.com/koooooge/embulk-parser-csv_guessable"
 
   spec.files         = `git ls-files`.split("\n") + Dir["classpath/*.jar"]
   spec.test_files    = spec.files.grep(%r"^(test|spec)/")
