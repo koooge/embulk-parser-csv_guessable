@@ -1,7 +1,7 @@
 # Csv Guessable parser plugin for Embulk
-embulk-parser-csv_gussable guesses and parses csv which has schema in header.
+**embulk-parser-csv_gussable** guesses and parses csv which has schema in header.
 
-Also `embulk-parser-csv_guessable` can behave as original csv parser.
+Also it can behave as original csv parser without **embulk-parser-csv_guessable** specified configs.
 
 ## Overview
 
@@ -16,6 +16,15 @@ Also `embulk-parser-csv_guessable` can behave as original csv parser.
 - any other csv configs: see [www.embulk.org](http://www.embulk.org/docs/built-in.html#csv-parser-plugin)
 
 ## Example
+data/test.csv
+
+```csv
+id, title, description
+1, awesome-title, awesome-description
+2, shoddy-title, shoddy-description
+```
+
+config.yml
 
 ```yaml
 in:
@@ -23,7 +32,7 @@ in:
   parser:
     type: csv_guessable
     schema_file: data/test.csv
-    schema_line: 3
+    schema_line: 1
 ```
 
 <!--
