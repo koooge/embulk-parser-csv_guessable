@@ -1,0 +1,13 @@
+in:
+  type: file
+  path_prefix: data/test
+  parser:
+    type: csv_with_header
+    schema_file: data/test.csv
+    schema_line: 1
+    columns:
+      - {value_name: '#', name: number, type: long}
+      - {value_name: 'title', name: description, type: string}
+      - {value_name: 'status', name: ok?, type: string}
+out:
+  type: stdout

@@ -1,0 +1,9 @@
+in:
+  type: file
+  path_prefix: data/test
+  parser:
+    type: csv_with_header
+    schema_file: data/test.csv
+    schema_line: 1
+out:
+  type: stdout

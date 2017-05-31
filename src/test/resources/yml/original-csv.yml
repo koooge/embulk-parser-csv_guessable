@@ -1,0 +1,12 @@
+in:
+  type: file
+  path_prefix: data/test
+  parser:
+    type: csv_with_header
+    skip_header_line: 1
+    columns:
+      - {name: id, type: long}
+      - {name: title, type: string}
+      - {name: status, type: string}
+out:
+  type: stdout
