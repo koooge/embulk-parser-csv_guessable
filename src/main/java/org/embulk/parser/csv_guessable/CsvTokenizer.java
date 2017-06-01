@@ -50,11 +50,13 @@ public class CsvTokenizer
         String delimiter = task.getDelimiter();
         if (delimiter.length() == 0) {
             throw new ConfigException("Empty delimiter is not allowed");
-        } else {
+        }
+        else {
             this.delimiterChar = delimiter.charAt(0);
             if (delimiter.length() > 1) {
                 delimiterFollowingString = delimiter.substring(1);
-            } else {
+            }
+            else {
                 delimiterFollowingString = null;
             }
         }
@@ -88,7 +90,8 @@ public class CsvTokenizer
         String skippedLine;
         if (quotedValueLines.isEmpty()) {
             skippedLine = line;
-        } else {
+        }
+        else {
             // recover lines of quoted value
             skippedLine = quotedValueLines.remove(0);  // TODO optimize performance
             unreadLines.addAll(quotedValueLines);
@@ -129,7 +132,8 @@ public class CsvTokenizer
         if (hasNext) {
             recordState = RecordState.NOT_END;
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -139,7 +143,8 @@ public class CsvTokenizer
         while (true) {
             if (!unreadLines.isEmpty()) {
                 line = unreadLines.removeFirst();
-            } else {
+            }
+            else {
                 line = input.poll();
                 if (line == null) {
                     return false;
@@ -189,7 +194,8 @@ public class CsvTokenizer
                         // empty value
                         if (delimiterFollowingString == null) {
                             return "";
-                        } else if (isDelimiterFollowingFrom(linePos)) {
+                        }
+                        else if (isDelimiterFollowingFrom(linePos)) {
                             linePos += delimiterFollowingString.length();
                             return "";
                         }
@@ -199,17 +205,17 @@ public class CsvTokenizer
                         // empty value
                         recordState = RecordState.END;
                         return "";
-
-                    } else if (isSpace(c) && trimIfNotQuoted) {
+                    }
+                    else if (isSpace(c) && trimIfNotQuoted) {
                         columnState = ColumnState.FIRST_TRIM;
-
-                    } else if (isQuote(c)) {
+                    }
+                    else if (isQuote(c)) {
                         valueStartPos = linePos;  // == 1
                         wasQuotedColumn = true;
                         quotedValue = new StringBuilder();
                         columnState = ColumnState.QUOTED_VALUE;
-
-                    } else {
+                    }
+                    else {
                         columnState = ColumnState.VALUE;
                     }
                     break;
@@ -219,7 +225,8 @@ public class CsvTokenizer
                         // empty value
                         if (delimiterFollowingString == null) {
                             return "";
-                        } else if (isDelimiterFollowingFrom(linePos)) {
+                        }
+                        else if (isDelimiterFollowingFrom(linePos)) {
                             linePos += delimiterFollowingString.length();
                             return "";
                         }
@@ -229,18 +236,18 @@ public class CsvTokenizer
                         // empty value
                         recordState = RecordState.END;
                         return "";
-
-                    } else if (isQuote(c)) {
+                    }
+                    else if (isQuote(c)) {
                         // column has heading spaces and quoted. TODO should this be rejected?
                         valueStartPos = linePos;
                         wasQuotedColumn = true;
                         quotedValue = new StringBuilder();
                         columnState = ColumnState.QUOTED_VALUE;
-
-                    } else if (isSpace(c)) {
+                    }
+                    else if (isSpace(c)) {
                         // skip this character
-
-                    } else {
+                    }
+                    else {
                         valueStartPos = linePos - 1;
                         columnState = ColumnState.VALUE;
                     }
@@ -250,7 +257,8 @@ public class CsvTokenizer
                     if (isDelimiter(c)) {
                         if (delimiterFollowingString == null) {
                             return line.substring(valueStartPos, linePos - 1);
-                        } else if (isDelimiterFollowingFrom(linePos)) {
+                        }
+                        else if (isDelimiterFollowingFrom(linePos)) {
                             String value = line.substring(valueStartPos, linePos - 1);
                             linePos += delimiterFollowingString.length();
                             return value;
@@ -260,8 +268,8 @@ public class CsvTokenizer
                     if (isEndOfLine(c)) {
                         recordState = RecordState.END;
                         return line.substring(valueStartPos, linePos);
-
-                    } else if (isSpace(c) && trimIfNotQuoted) {
+                    }
+                    else if (isSpace(c) && trimIfNotQuoted) {
                         valueEndPos = linePos - 1;  // this is possibly end of value
                         columnState = ColumnState.LAST_TRIM_OR_VALUE;
 
@@ -270,8 +278,8 @@ public class CsvTokenizer
                     //    // In RFC4180, If fields are not enclosed with double quotes, then
                     //    // double quotes may not appear inside the fields. But they are often
                     //    // included in the fields. We should care about them later.
-
-                    } else {
+                    }
+                    else {
                         // keep VALUE state
                     }
                     break;
@@ -280,21 +288,23 @@ public class CsvTokenizer
                     if (isDelimiter(c)) {
                         if (delimiterFollowingString == null) {
                             return line.substring(valueStartPos, valueEndPos);
-                        } else if (isDelimiterFollowingFrom(linePos)) {
+                        }
+                        else if (isDelimiterFollowingFrom(linePos)) {
                             linePos += delimiterFollowingString.length();
                             return line.substring(valueStartPos, valueEndPos);
-                        } else {
+                        }
+                        else {
                             // not a delimiter
                         }
                     }
                     if (isEndOfLine(c)) {
                         recordState = RecordState.END;
                         return line.substring(valueStartPos, valueEndPos);
-
-                    } else if (isSpace(c)) {
+                    }
+                    else if (isSpace(c)) {
                         // keep LAST_TRIM_OR_VALUE state
-
-                    } else {
+                    }
+                    else {
                         // this spaces are not trailing spaces. go back to VALUE state
                         columnState = ColumnState.VALUE;
                     }
@@ -310,18 +320,19 @@ public class CsvTokenizer
                             throw new InvalidValueException("Unexpected end of line during parsing a quoted value");
                         }
                         valueStartPos = 0;
-
-                    } else if (isQuote(c)) {
+                    }
+                    else if (isQuote(c)) {
                         char next = peekNextChar();
                         if (isQuote(next)) { // escaped quote
                             quotedValue.append(line.substring(valueStartPos, linePos));
                             valueStartPos = ++linePos;
-                        } else {
+                        }
+                        else {
                             quotedValue.append(line.substring(valueStartPos, linePos - 1));
                             columnState = ColumnState.AFTER_QUOTED_VALUE;
                         }
-
-                    } else if (isEscape(c)) {  // isQuote must be checked first in case of quote == escape
+                    }
+                    else if (isEscape(c)) {  // isQuote must be checked first in case of quote == escape
                         // In RFC 4180, CSV's escape char is '\"'. But '\\' is often used.
                         char next = peekNextChar();
                         if (isEndOfLine(c)) {
@@ -332,15 +343,16 @@ public class CsvTokenizer
                                 throw new InvalidValueException("Unexpected end of line during parsing a quoted value");
                             }
                             valueStartPos = 0;
-                        } else if (isQuote(next) || isEscape(next)) { // escaped quote
+                        }
+                        else if (isQuote(next) || isEscape(next)) { // escaped quote
                             quotedValue.append(line.substring(valueStartPos, linePos - 1));
                             quotedValue.append(next);
                             valueStartPos = ++linePos;
                         }
-
-                    } else {
+                    }
+                    else {
                         if ((linePos - valueStartPos) + quotedValue.length() > maxQuotedSizeLimit) {
-                            throw new QuotedSizeLimitExceededException("The size of the quoted value exceeds the limit size ("+maxQuotedSizeLimit+")");
+                            throw new QuotedSizeLimitExceededException("The size of the quoted value exceeds the limit size (" + maxQuotedSizeLimit + ")");
                         }
                         // keep QUOTED_VALUE state
                     }
@@ -350,7 +362,8 @@ public class CsvTokenizer
                     if (isDelimiter(c)) {
                         if (delimiterFollowingString == null) {
                             return quotedValue.toString();
-                        } else if (isDelimiterFollowingFrom(linePos)) {
+                        }
+                        else if (isDelimiterFollowingFrom(linePos)) {
                             linePos += delimiterFollowingString.length();
                             return quotedValue.toString();
                         }
@@ -359,11 +372,11 @@ public class CsvTokenizer
                     if (isEndOfLine(c)) {
                         recordState = RecordState.END;
                         return quotedValue.toString();
-
-                    } else if (isSpace(c)) {
+                    }
+                    else if (isSpace(c)) {
                         // column has trailing spaces and quoted. TODO should this be rejected?
-
-                    } else {
+                    }
+                    else {
                         throw new InvalidValueException(String.format("Unexpected extra character '%c' after a value quoted by '%c'", c, quote));
                     }
                     break;
@@ -411,7 +424,8 @@ public class CsvTokenizer
 
         if (linePos >= line.length()) {
             return END_OF_LINE;
-        } else {
+        }
+        else {
             return line.charAt(linePos++);
         }
     }
@@ -422,7 +436,8 @@ public class CsvTokenizer
 
         if (linePos >= line.length()) {
             return END_OF_LINE;
-        } else {
+        }
+        else {
             return line.charAt(linePos);
         }
     }

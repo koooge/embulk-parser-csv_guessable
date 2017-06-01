@@ -136,7 +136,8 @@ public class CsvGuessableParserPlugin
             if (task.getHeaderLine().isPresent()) {
                 // TODO: use 'columns' as hints for guess
                 throw new ConfigException("embulk-parsre-csv_gussable will use 'columnes' as hints for guess as hints for guess. Please delete 'columnes' now.");
-            } else { /* guess from header */
+            }
+            else { /* guess from header */
                 int schemaLine = task.getSchemaLine();
                 task.setSkipHeaderLines(schemaLine); // TODO: use 'skip_header_line'
 
@@ -146,7 +147,8 @@ public class CsvGuessableParserPlugin
                 log.debug(columns.toString());
                 schemaConfig = new SchemaConfig(columns);
             }
-        } else { /* embulk-parser-csv embulk */
+        }
+        else { /* embulk-parser-csv embulk */
             // backward compatibility
             if (task.getHeaderLine().isPresent()) {
                 if (task.getSkipHeaderLines() > 0) {
@@ -154,7 +156,8 @@ public class CsvGuessableParserPlugin
                 }
                 if (task.getHeaderLine().get()) {
                     task.setSkipHeaderLines(1);
-                } else {
+                }
+                else {
                     task.setSkipHeaderLines(0);
                 }
             }
@@ -204,7 +207,8 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     pageBuilder.setBoolean(column, TRUE_STRINGS.contains(v));
                                 }
                             }
@@ -214,10 +218,12 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     try {
                                         pageBuilder.setLong(column, Long.parseLong(v));
-                                    } catch (NumberFormatException e) {
+                                    }
+                                    catch (NumberFormatException e) {
                                         // TODO support default value
                                         throw new CsvRecordValidateException(e);
                                     }
@@ -229,10 +235,12 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     try {
                                         pageBuilder.setDouble(column, Double.parseDouble(v));
-                                    } catch (NumberFormatException e) {
+                                    }
+                                    catch (NumberFormatException e) {
                                         // TODO support default value
                                         throw new CsvRecordValidateException(e);
                                     }
@@ -244,7 +252,8 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     pageBuilder.setString(column, v);
                                 }
                             }
@@ -254,10 +263,12 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     try {
 //                                        pageBuilder.setTimestamp(column, timestampParsers[column.getIndex()].parse(v));
-                                    } catch (TimestampParseException e) {
+                                    }
+                                    catch (TimestampParseException e) {
                                         // TODO support default value
                                         throw new CsvRecordValidateException(e);
                                     }
@@ -269,10 +280,12 @@ public class CsvGuessableParserPlugin
                                 String v = nextColumn();
                                 if (v == null) {
                                     pageBuilder.setNull(column);
-                                } else {
+                                }
+                                else {
                                     try {
                                         pageBuilder.setJson(column, jsonParser.parse(v));
-                                    } catch (JsonParseException e) {
+                                    }
+                                    catch (JsonParseException e) {
                                         // TODO support default value
                                         throw new CsvRecordValidateException(e);
                                     }
@@ -291,19 +304,21 @@ public class CsvGuessableParserPlugin
 
                         try {
                             hasNextRecord = tokenizer.nextRecord();
-                        } catch (CsvTokenizer.TooManyColumnsException ex) {
+                        }
+                        catch (CsvTokenizer.TooManyColumnsException ex) {
                             if (allowExtraColumns) {
                                 String tooManyColumnsLine = tokenizer.skipCurrentLine();
                                 // TODO warning
                                 hasNextRecord = tokenizer.nextRecord();
-                            } else {
+                            }
+                            else {
                                 // this line will be skipped at the following catch section
                                 throw ex;
                             }
                         }
                         pageBuilder.addRecord();
-
-                    } catch (CsvTokenizer.InvalidFormatException | CsvTokenizer.InvalidValueException | CsvRecordValidateException e) {
+                    }
+                    catch (CsvTokenizer.InvalidFormatException | CsvTokenizer.InvalidValueException | CsvRecordValidateException e) {
                         String skippedLine = tokenizer.skipCurrentLine();
                         long lineNumber = tokenizer.getCurrentLineNumber();
                         if (stopOnInvalidRecord) {
@@ -334,14 +349,15 @@ public class CsvGuessableParserPlugin
         }
     }
 
-    private String readHeader(Path path, int schemaLine) {
+    private String readHeader(Path path, int schemaLine)
+    {
         if (schemaLine <= 0) {
             throw new ConfigException("'schemaLine' must be set '> 0'");
         }
 
         String line = null;
         try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            for (int i=1; i <= schemaLine; ++i) {
+            for (int i = 1; i <= schemaLine; ++i) {
                 line = br.readLine();
                 if (line == null) {
                     throw new ConfigException("not found 'schema_line' in 'schema_file'");
@@ -353,13 +369,14 @@ public class CsvGuessableParserPlugin
         return line;
     }
 
-    private ArrayList<ColumnConfig> newColumns(String header, ConfigSource config) {
-        ArrayList columns = new ArrayList<ArrayList>(); 
+    private ArrayList<ColumnConfig> newColumns(String header, ConfigSource config)
+    {
+        ArrayList columns = new ArrayList<ArrayList>();
         PluginTask task = config.loadConfig(PluginTask.class);
 
         try (CSVReader reader = new CSVReader(new StringReader(header))) {
             String[] csv = reader.readNext();
-            for (String column: csv) {
+            for (String column : csv) {
                 columns.add(new ColumnConfig(column, Types.STRING, config));
             }
         } catch (IOException e) {
