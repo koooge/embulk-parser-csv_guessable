@@ -1,13 +1,14 @@
 package org.embulk.parser.csv_guessable;
 
 import com.google.common.base.Preconditions;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.ArrayDeque;
+import org.embulk.config.ConfigException;
 import org.embulk.spi.DataException;
 import org.embulk.spi.util.LineDecoder;
-import org.embulk.config.ConfigException;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 public class CsvTokenizer
 {

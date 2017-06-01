@@ -1,17 +1,16 @@
 package org.embulk.parser.csv_guessable;
 
+import org.embulk.EmbulkTestRuntime;
 import org.embulk.config.ConfigException;
 import org.embulk.config.ConfigLoader;
 import org.embulk.config.ConfigSource;
-import org.embulk.EmbulkTestRuntime;
 import org.embulk.spi.Exec;
 import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
+import org.junit.rules.ExpectedException;
 
 import static org.embulk.parser.csv_guessable.CsvGuessableParserPlugin.PluginTask;
+import static org.junit.Assert.assertFalse;
 
 public class TestCsvGuessableParserPlugin
 {

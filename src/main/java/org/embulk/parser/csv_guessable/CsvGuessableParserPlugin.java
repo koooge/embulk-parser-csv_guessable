@@ -2,19 +2,10 @@ package org.embulk.parser.csv_guessable;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-import java.io.BufferedReader;
 import com.opencsv.CSVReader; // TODO: use embulk's parser
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import org.slf4j.Logger;
 
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
-import org.embulk.config.ConfigDiff;
 import org.embulk.config.ConfigException;
 import org.embulk.config.ConfigSource;
 import org.embulk.config.Task;
@@ -25,21 +16,30 @@ import org.embulk.spi.ColumnVisitor;
 import org.embulk.spi.DataException;
 import org.embulk.spi.Exec;
 import org.embulk.spi.FileInput;
-import org.embulk.spi.json.JsonParser;
-import org.embulk.spi.json.JsonParseException;
 import org.embulk.spi.PageBuilder;
 import org.embulk.spi.PageOutput;
 import org.embulk.spi.ParserPlugin;
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfig;
-import org.embulk.spi.time.TimestampParser;
+import org.embulk.spi.json.JsonParseException;
+import org.embulk.spi.json.JsonParser;
 import org.embulk.spi.time.TimestampParseException;
+import org.embulk.spi.time.TimestampParser;
 import org.embulk.spi.type.Types;
 import org.embulk.spi.unit.LocalFile;
 import org.embulk.spi.util.LineDecoder;
 import org.embulk.spi.util.Timestamps;
-
 import org.embulk.standards.CsvParserPlugin;
+
+import org.slf4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class CsvGuessableParserPlugin
         extends CsvParserPlugin
