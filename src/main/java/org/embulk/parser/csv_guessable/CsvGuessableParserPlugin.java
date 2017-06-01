@@ -202,6 +202,7 @@ public class CsvGuessableParserPlugin
 
                     try {
                         schema.visitColumns(new ColumnVisitor() {
+                            @Override
                             public void booleanColumn(Column column)
                             {
                                 String v = nextColumn();
@@ -213,6 +214,7 @@ public class CsvGuessableParserPlugin
                                 }
                             }
 
+                            @Override
                             public void longColumn(Column column)
                             {
                                 String v = nextColumn();
@@ -230,6 +232,7 @@ public class CsvGuessableParserPlugin
                                 }
                             }
 
+                            @Override
                             public void doubleColumn(Column column)
                             {
                                 String v = nextColumn();
@@ -247,6 +250,7 @@ public class CsvGuessableParserPlugin
                                 }
                             }
 
+                            @Override
                             public void stringColumn(Column column)
                             {
                                 String v = nextColumn();
@@ -258,6 +262,7 @@ public class CsvGuessableParserPlugin
                                 }
                             }
 
+                            @Override
                             public void timestampColumn(Column column)
                             {
                                 String v = nextColumn();
@@ -275,6 +280,7 @@ public class CsvGuessableParserPlugin
                                 }
                             }
 
+                            @Override
                             public void jsonColumn(Column column)
                             {
                                 String v = nextColumn();
