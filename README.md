@@ -1,8 +1,8 @@
 # Csv Guessable parser plugin for Embulk
-**embulk-parser-csv_gussable** (runtime) guesses and parses csv which has schema in header.
+**embulk-parser-csv_guessable** (runtime)guesses and parses csv which has schema in header.
 This plugin is useful in case of target csv schema changes frequently.
 
-Also it can behave as original csv parser without **embulk-parser-csv_guessable** specified configs.
+It behaves as original csv parser when **embulk-parser-csv_guessable** conifgs(`schema_file` and `schema_line`) is not defined.
 
 ## Overview
 
