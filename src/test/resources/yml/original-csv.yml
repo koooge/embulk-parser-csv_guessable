@@ -5,8 +5,8 @@ in:
     type: csv_guessable
     skip_header_line: 1
     columns:
-      - {name: id, type: long}
-      - {name: title, type: string}
-      - {name: status, type: string}
+    - {name: id, type: long}
+    - {name: title, type: string}
+    - {name: status, type: string}
 out:
   type: stdout
