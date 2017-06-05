@@ -55,7 +55,7 @@ in:
   parser:
     type: csv
     skip_header_lines: 1
-    column:
+    columns:
     - {name: id, type: string}
     - {name: title, type: string}
     - {name: description, type: string}
