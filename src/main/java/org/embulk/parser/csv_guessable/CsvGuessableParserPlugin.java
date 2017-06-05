@@ -21,7 +21,6 @@ import org.embulk.spi.PageOutput;
 import org.embulk.spi.ParserPlugin;
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfig;
-import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.json.JsonParseException;
 import org.embulk.spi.json.JsonParser;
 import org.embulk.spi.time.TimestampParseException;
@@ -41,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CsvGuessableParserPlugin
         extends CsvParserPlugin
@@ -139,28 +139,30 @@ public class CsvGuessableParserPlugin
 
             String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine);
             log.debug(header);
-            ArrayList<ColumnConfig> columns = newColumns(header, config);
+            ArrayList<ColumnConfig> schema = newColumns(header, config);
 
-            /* set type */
+            /* alias and set type */
             if (task.getSchemaConfig().isPresent()) {
-                log.debug(task.getSchemaConfig().get().toString());
-                for (int i = 0; i < columns.size(); ++i) {
-                    ColumnConfig column = columns.get(i);
+                List<ColumnConfig> columns = task.getSchemaConfig().get().getColumns();
+                for (ColumnConfig column : columns) {
+                    String name = column.getName();
                     try {
-                        ColumnConfig c = task.getSchemaConfig().get().lookupColumn(column.getName());
-                        columns.set(i, new ColumnConfig(c.getName(), c.getType(), c.getOption())); // TODO: value_name
-                        log.debug(i + "hit");
-                        
+                        name = column.getConfigSource().get(String.class, "value_name");
                     }
-                    catch (SchemaConfigException e) {
-                        log.debug(i + "miss");
-                        /* nop */
+                    catch (ConfigException e) {
+                        /* only setType */
+                    }
+                    for (int i = 0; i < schema.size(); ++i) {
+                        ColumnConfig c = schema.get(i);
+                        if (c.getName().equals(name)) {
+                            schema.set(i, new ColumnConfig(name, column.getType(), column.getOption()));
+                        }
                     }
                 }
             }
 
-            log.debug(columns.toString());
-            schemaConfig = new SchemaConfig(columns);
+            log.debug(schema.toString());
+            schemaConfig = new SchemaConfig(schema);
         }
         else if (task.getSchemaConfig().isPresent()) { /* original CsvParserPlugin */
             // backward compatibility
@@ -394,7 +396,7 @@ public class CsvGuessableParserPlugin
 
     private ArrayList<ColumnConfig> newColumns(String header, ConfigSource config)
     {
-        ArrayList columns = new ArrayList<ArrayList>();
+        ArrayList<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         PluginTask task = config.loadConfig(PluginTask.class);
 
         try (CSVReader reader = new CSVReader(new StringReader(header))) {
