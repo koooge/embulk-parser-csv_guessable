@@ -21,6 +21,7 @@ import org.embulk.spi.PageOutput;
 import org.embulk.spi.ParserPlugin;
 import org.embulk.spi.Schema;
 import org.embulk.spi.SchemaConfig;
+import org.embulk.spi.SchemaConfigException;
 import org.embulk.spi.json.JsonParseException;
 import org.embulk.spi.json.JsonParser;
 import org.embulk.spi.time.TimestampParseException;
@@ -132,21 +133,34 @@ public class CsvGuessableParserPlugin
         PluginTask task = config.loadConfig(PluginTask.class);
         SchemaConfig schemaConfig = null;
 
-        if (task.getSchemaFile().isPresent()) { /* embulk-parser-csv_guessable */
-            if (task.getSchemaConfig().isPresent()) {
-                // TODO: use 'columns' as hints for guess
-                throw new ConfigException("embulk-parsre-csv_gussable will use 'columnes' as hints for guess. Please delete 'columnes' now.");
-            }
-            else { /* guess from header */
-                int schemaLine = task.getSchemaLine();
-                task.setSkipHeaderLines(schemaLine); // TODO: use 'skip_header_line'
+        if (task.getSchemaFile().isPresent()) {
+            int schemaLine = task.getSchemaLine();
+            task.setSkipHeaderLines(schemaLine); // TODO: use 'skip_header_line'
 
-                String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine);
-                log.debug(header);
-                ArrayList<ColumnConfig> columns = newColumns(header, config);
-                log.debug(columns.toString());
-                schemaConfig = new SchemaConfig(columns);
+            String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine);
+            log.debug(header);
+            ArrayList<ColumnConfig> columns = newColumns(header, config);
+
+            /* set type */
+            if (task.getSchemaConfig().isPresent()) {
+                log.debug(task.getSchemaConfig().get().toString());
+                for (int i = 0; i < columns.size(); ++i) {
+                    ColumnConfig column = columns.get(i);
+                    try {
+                        ColumnConfig c = task.getSchemaConfig().get().lookupColumn(column.getName());
+                        columns.set(i, new ColumnConfig(c.getName(), c.getType(), c.getOption())); // TODO: value_name
+                        log.debug(i + "hit");
+                        
+                    }
+                    catch (SchemaConfigException e) {
+                        log.debug(i + "miss");
+                        /* nop */
+                    }
+                }
             }
+
+            log.debug(columns.toString());
+            schemaConfig = new SchemaConfig(columns);
         }
         else if (task.getSchemaConfig().isPresent()) { /* original CsvParserPlugin */
             // backward compatibility
