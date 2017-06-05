@@ -1,5 +1,8 @@
-# Csv Guessable parser plugin for Embulk
+# Guessable csv parser plugin for Embulk
 **embulk-parser-csv_guessable** (runtime)guesses and parses csv which has schema in header.
+
+Csv file sometimes has a schema in the header.
+**embulk-parser-csv_guessable** parses such a csv by using their header as column name.
 This plugin is useful in case of target csv schema changes frequently.
 
 It behaves as original csv parser when **embulk-parser-csv_guessable** conifgs(`schema_file` and `schema_line`) is not defined.
@@ -17,7 +20,7 @@ It behaves as original csv parser when **embulk-parser-csv_guessable** conifgs(`
 - any other csv configs: see [www.embulk.org](http://www.embulk.org/docs/built-in.html#csv-parser-plugin)
 
 ## Example
-test.csv
+test.csv (There is a schema at the first line.)
 
 ```csv
 id, title, description
@@ -32,7 +35,7 @@ in:
   type: any file input plugin type
   parser:
     type: csv_guessable
-    schema_file: data/test.csv
+    schema_file: test.csv
     schema_line: 1
 ```
 
