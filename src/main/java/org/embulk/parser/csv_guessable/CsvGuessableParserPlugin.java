@@ -133,9 +133,9 @@ public class CsvGuessableParserPlugin
         SchemaConfig schemaConfig = null;
 
         if (task.getSchemaFile().isPresent()) { /* embulk-parser-csv_guessable */
-            if (task.getHeaderLine().isPresent()) {
+            if (task.getSchemaConfig().isPresent()) {
                 // TODO: use 'columns' as hints for guess
-                throw new ConfigException("embulk-parsre-csv_gussable will use 'columnes' as hints for guess as hints for guess. Please delete 'columnes' now.");
+                throw new ConfigException("embulk-parsre-csv_gussable will use 'columnes' as hints for guess. Please delete 'columnes' now.");
             }
             else { /* guess from header */
                 int schemaLine = task.getSchemaLine();
@@ -148,7 +148,7 @@ public class CsvGuessableParserPlugin
                 schemaConfig = new SchemaConfig(columns);
             }
         }
-        else { /* embulk-parser-csv embulk */
+        else if (task.getSchemaConfig().isPresent()) { /* original CsvParserPlugin */
             // backward compatibility
             if (task.getHeaderLine().isPresent()) {
                 if (task.getSkipHeaderLines() > 0) {
@@ -162,6 +162,9 @@ public class CsvGuessableParserPlugin
                 }
             }
             schemaConfig = task.getSchemaConfig().get();
+        }
+        else {
+            throw new ConfigException("Field 'columns' or 'schema_file' is required but not set");
         }
 
         control.run(task.dump(), schemaConfig.toSchema());
