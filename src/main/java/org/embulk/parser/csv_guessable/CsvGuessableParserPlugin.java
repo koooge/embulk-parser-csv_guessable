@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class CsvGuessableParserPlugin
             int schemaLine = task.getSchemaLine();
             task.setSkipHeaderLines(schemaLine); // TODO: use 'skip_header_line'
 
-            String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine);
+            String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine, task.getCharset());
             log.debug(header);
             ArrayList<ColumnConfig> schema = newColumns(header, config);
 
@@ -374,14 +374,14 @@ public class CsvGuessableParserPlugin
         }
     }
 
-    private String readHeader(Path path, int schemaLine)
+    private String readHeader(Path path, int schemaLine, Charset charset)
     {
         if (schemaLine <= 0) {
             throw new ConfigException("'schemaLine' must be set '> 0'");
         }
 
         String line = null;
-        try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(path, charset)) {
             for (int i = 1; i <= schemaLine; ++i) {
                 line = br.readLine();
                 if (line == null) {
