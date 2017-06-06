@@ -155,7 +155,7 @@ public class CsvGuessableParserPlugin
                     for (int i = 0; i < schema.size(); ++i) {
                         ColumnConfig c = schema.get(i);
                         if (c.getName().equals(name)) {
-                            schema.set(i, new ColumnConfig(name, column.getType(), column.getOption()));
+                            schema.set(i, new ColumnConfig(column.getName(), column.getType(), column.getOption()));
                         }
                     }
                 }
