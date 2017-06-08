@@ -1,0 +1,13 @@
+in:
+  type: file
+  path_prefix: "./sample"
+  parser:
+    type: csv_guessable
+    schema_file: sample1.csv
+    charset: MS932
+    columns:
+      - {name: 'ken-code', type: long}
+      - {name: 'sityouson-code', type: long}
+      - {name: 'tiiki-code', type: long}
+out:
+  type: stdout

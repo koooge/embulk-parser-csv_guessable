@@ -1,0 +1,9 @@
+in:
+  type: file
+  path_prefix: "./sample"
+  parser:
+    type: csv_guessable
+    schema_file: sample1.csv
+    charset: MS932
+out:
+  type: stdout

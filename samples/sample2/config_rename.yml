@@ -1,0 +1,18 @@
+in:
+  type: file
+  path_prefix: "./sample"
+  parser:
+    type: csv_guessable
+    schema_file: sample2.csv
+    charset: MS932
+    columns:
+      - {value_name: '県コード', name: 'ken-code', type: long}
+      - {value_name: '市町村コード', name: 'sityouson-code', type: long}
+      - {value_name: '地域コード', name: 'tiiki-code', type: long}
+      - {value_name: '県名', name: 'ken-name', type: string}
+      - {value_name: '市町村名1', name: 'sityouson-name1', type: string}
+      - {value_name: '市町村名2', name: 'sityouson-name2', type: string}
+      - {value_name: '市町村名3', name: 'sityouson-name3', type: string}
+      - {value_name: '読み仮名', name: 'yomigana', type: string}
+out:
+  type: stdout
