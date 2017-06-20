@@ -24,8 +24,6 @@ It behaves as original csv parser when **embulk-parser-csv_guessable** conifgs(`
     - **date**: Set date part if the format doesn't include date part
 - any other csv configs: see [www.embulk.org](http://www.embulk.org/docs/built-in.html#csv-parser-plugin)
 
-The `columns` 
-
 ## Example
 test.csv (There is a schema at the first line.)
 
