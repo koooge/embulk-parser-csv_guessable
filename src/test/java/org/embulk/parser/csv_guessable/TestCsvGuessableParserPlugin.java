@@ -175,9 +175,9 @@ public class TestCsvGuessableParserPlugin
                 "type: csv_guessable\n" +
                 "schema_file: src/test/resources/org/embulk/parser/csv_guessable/data/test.csv\n" +
                 "columns:\n" +
-                "  - {value_name: 'id', name: 'number', type: string}\n" +
-                "  - {value_name: 'title', name: 'description', type: string}\n" +
-                "  - {value_name: 'status', name: 'ok?', type: string}";
+                "  - {value_name: 'id', name: 'number'}\n" +
+                "  - {value_name: 'title', name: 'description'}\n" +
+                "  - {value_name: 'status', name: 'ok?'}";
         ConfigSource config = getConfigFromYaml(configYaml);
         transaction(config, fileInput("data/test.csv"));
 
