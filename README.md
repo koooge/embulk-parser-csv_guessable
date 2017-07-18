@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/embulk-parser-csv_guessable.svg)](https://badge.fury.io/rb/embulk-parser-csv_guessable)
+
 # Guessable csv parser plugin for Embulk
 **embulk-parser-csv_guessable** (runtime)guesses and parses csv which has schema in header.
 
