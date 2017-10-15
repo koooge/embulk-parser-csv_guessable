@@ -231,6 +231,33 @@ public class TestCsvGuessableParserPlugin
         }
     }
 
+    @Test
+    public void skipHeaderLinesIsLargerThanHeaderLine()
+            throws Exception
+    {
+        String configYaml = "" +
+                "type: csv_guessable\n" +
+                "schema_file: src/test/resources/org/embulk/parser/csv_guessable/data/test.csv\n" + // TODO: FIX PATH
+                "skip_header_lines: 2\n" +
+                "columnes:\n" +
+                "  - {value_name: 'id', type: long}\n" +
+                "  - {value_name: 'title', type: string}\n" +
+                "  - {value_name: 'status', type: string}";
+        ConfigSource config = getConfigFromYaml(configYaml);
+        transaction(config, fileInput("data/test.csv"));
+
+        List<Object[]> records = Pages.toObjects(schema, output.pages);
+        assertEquals(1, records.size());
+
+        Object[] record;
+        {
+            record = records.get(0);
+            assertEquals("191", record[0]);
+            assertEquals("title2", record[1]);
+            assertEquals("ng", record[2]);
+        }
+    }
+
     private ConfigSource getConfigFromYaml(String yaml)
     {
         ConfigLoader loader = new ConfigLoader(Exec.getModelManager());

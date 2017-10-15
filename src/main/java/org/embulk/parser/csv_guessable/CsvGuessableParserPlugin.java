@@ -135,7 +135,9 @@ public class CsvGuessableParserPlugin
 
         if (task.getSchemaFile().isPresent()) {
             int schemaLine = task.getSchemaLine();
-            task.setSkipHeaderLines(schemaLine); // TODO: use 'skip_header_line'
+            if (schemaLine > task.getSkipHeaderLines()) {
+                task.setSkipHeaderLines(schemaLine);
+            }
 
             String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine, task.getCharset());
             log.debug(header);
