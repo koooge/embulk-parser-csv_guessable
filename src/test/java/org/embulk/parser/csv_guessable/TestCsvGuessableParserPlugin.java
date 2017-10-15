@@ -175,9 +175,9 @@ public class TestCsvGuessableParserPlugin
                 "type: csv_guessable\n" +
                 "schema_file: src/test/resources/org/embulk/parser/csv_guessable/data/test.csv\n" +
                 "columns:\n" +
-                "  - {value_name: 'id', name: 'number'}\n" +
-                "  - {value_name: 'title', name: 'description'}\n" +
-                "  - {value_name: 'status', name: 'ok?'}";
+                "  - {value_name: 'id', name: 'number', type: long}\n" +
+                "  - {value_name: 'title', name: 'description', type: string}\n" +
+                "  - {value_name: 'status', name: 'ok?', type: string}";
         ConfigSource config = getConfigFromYaml(configYaml);
         transaction(config, fileInput("data/test.csv"));
 
@@ -185,7 +185,7 @@ public class TestCsvGuessableParserPlugin
         {
             column = schema.getColumn(0);
             assertEquals("number", column.getName());
-            assertEquals(Types.STRING, column.getType());
+            assertEquals(Types.LONG, column.getType());
         }
         {
             column = schema.getColumn(1);
