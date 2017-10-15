@@ -88,8 +88,21 @@ $ embulk gem install embulk-parser-csv_guessable
 $ embulk guess -g csv_guessable config.yml -o guessed.yml
 -->
 
+## Sample
+
+```
+$ cd samples/sample2
+$ embulk run -L ../../ config_rename.yml -l debug
+```
+
 ## Build
 
 ```
 $ ./gradlew gem  # -t to watch change of files and rebuild continuously
+```
+
+## Test
+
+```
+$ ./gradlew test
 ```
