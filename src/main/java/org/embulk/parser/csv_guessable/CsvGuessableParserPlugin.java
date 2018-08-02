@@ -403,7 +403,7 @@ public class CsvGuessableParserPlugin
         ArrayList<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         PluginTask task = config.loadConfig(PluginTask.class);
 
-        try (CSVReader reader = new CSVReader(new StringReader(header), delimiter.toCharArray()[0])) {
+        try (CSVReader reader = new CSVReader(new StringReader(header), delimiter.charAt(0))) {
             String[] csv = reader.readNext();
             for (String column : csv) {
                 columns.add(new ColumnConfig(column, Types.STRING, config));
