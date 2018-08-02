@@ -141,7 +141,9 @@ public class CsvGuessableParserPlugin
 
             String header = readHeader(task.getSchemaFile().get().getPath(), schemaLine, task.getCharset());
             log.debug(header);
-            ArrayList<ColumnConfig> schema = newColumns(header, config);
+            String delimiter = task.getDelimiter();
+            ArrayList<ColumnConfig> schema = newColumns(header, config, delimiter);
+
 
             /* alias and set type */
             if (task.getSchemaConfig().isPresent()) {
@@ -396,12 +398,12 @@ public class CsvGuessableParserPlugin
         return line;
     }
 
-    private ArrayList<ColumnConfig> newColumns(String header, ConfigSource config)
+    private ArrayList<ColumnConfig> newColumns(String header, ConfigSource config, String delimiter)
     {
         ArrayList<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         PluginTask task = config.loadConfig(PluginTask.class);
 
-        try (CSVReader reader = new CSVReader(new StringReader(header))) {
+        try (CSVReader reader = new CSVReader(new StringReader(header), delimiter.toCharArray()[0])) {
             String[] csv = reader.readNext();
             for (String column : csv) {
                 columns.add(new ColumnConfig(column, Types.STRING, config));

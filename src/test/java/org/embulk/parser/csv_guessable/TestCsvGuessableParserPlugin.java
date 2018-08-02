@@ -121,6 +121,35 @@ public class TestCsvGuessableParserPlugin
     }
 
     @Test
+    public void guessableTsv()
+            throws Exception
+    {
+        String configYaml = "" +
+                "type: csv_guessable\n" +
+                "schema_file: src/test/resources/org/embulk/parser/csv_guessable/data/test.tsv\n" + // TODO: FIX PATH
+                "schema_line: 1\n" +
+                "delimiter: \"\\t\"";
+        ConfigSource config = getConfigFromYaml(configYaml);
+        transaction(config, fileInput("data/test.tsv"));
+        List<Object[]> records = Pages.toObjects(schema, output.pages);
+        assertEquals(2, records.size());
+
+        Object[] record;
+        {
+            record = records.get(0);
+            assertEquals("100", record[0]);
+            assertEquals("test-title", record[1]);
+            assertEquals("ok", record[2]);
+        }
+        {
+            record = records.get(1);
+            assertEquals("191", record[0]);
+            assertEquals("title2", record[1]);
+            assertEquals("ng", record[2]);
+        }
+    }
+
+    @Test
     public void specifyType()
             throws Exception
     {
