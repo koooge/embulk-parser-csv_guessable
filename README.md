@@ -15,6 +15,10 @@ It behaves as original csv parser when **embulk-parser-csv_guessable** configs(`
 * **Plugin type**: parser
 * **Guess supported**: no
 
+## Prerequisites
+ - java: 1.8+ 
+ - embulk: 0.9+
+
 ## Configuration
 
 - **schema_file**: filename which has schema.(string, default: `null`)
