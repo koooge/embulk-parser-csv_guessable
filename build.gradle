@@ -21,7 +21,7 @@ targetCompatibility = 1.8
 dependencies {
     compile "org.embulk:embulk-core:0.9.+"
     compile "org.embulk:embulk-standards:0.9.+"
-    compile "com.opencsv:opencsv:3.9"
+    compile "com.opencsv:opencsv:4.2"
     provided "org.embulk:embulk-core:0.9.+"
     testCompile "junit:junit:4.+"
     testCompile "org.embulk:embulk-core:0.9.+:tests"
