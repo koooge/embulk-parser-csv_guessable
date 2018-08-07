@@ -53,20 +53,22 @@ task checkstyle(type: Checkstyle) {
 }
 
 task gem(type: JRubyExec, dependsOn: ["gemspec", "classpath"]) {
-    jrubyArgs "-rrubygems/gem_runner", "-eGem::GemRunner.new.run(ARGV)", "build"
-    script "${project.name}.gemspec"
+    jrubyArgs "-S"
+    script "gem"
+    scriptArgs "build", "${project.name}.gemspec"
     doLast { ant.move(file: "${project.name}-${project.version}.gem", todir: "pkg") }
 }
 
 task gemPush(type: JRubyExec, dependsOn: ["gem"]) {
-    jrubyArgs "-rrubygems/gem_runner", "-eGem::GemRunner.new.run(ARGV)", "push"
-    script "pkg/${project.name}-${project.version}.gem"
+    jrubyArgs "-S"
+    script "gem"
+    scriptArgs "push", "pkg/${project.name}-${project.version}.gem"
 }
 
 task "package"(dependsOn: ["gemspec", "classpath"]) {
     doLast {
         println "> Build succeeded."
-        println "> You can run embulk with '-L ${file(".").absolutePath}' argument."
+        println "> You can run embulk with ${argumentToRunEmbulkJava} argument."
     }
 }
 
