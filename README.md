@@ -8,7 +8,7 @@ Csv file sometimes has a schema in the header.
 **embulk-parser-csv_guessable** parses such a csv by using their header as column name.
 This plugin is useful in case of target csv schema changes frequently.
 
-It behaves as original csv parser when **embulk-parser-csv_guessable** conifgs(`schema_file` and `schema_line`) is not defined.
+It behaves as original csv parser when **embulk-parser-csv_guessable** configs(`schema_file` and `schema_line`) is not defined.
 
 ## Overview
 
